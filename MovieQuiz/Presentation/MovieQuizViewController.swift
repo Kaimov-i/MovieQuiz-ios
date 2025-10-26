@@ -1,6 +1,10 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController {
+   
+    @IBOutlet weak var label: UILabel!
+    
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
