@@ -21,6 +21,7 @@ struct QuizResultsViewModel {
 final class MovieQuizViewController: UIViewController {
     
     @IBOutlet weak private var imageView: UIImageView!
+    
     @IBOutlet weak private var textLabel: UILabel!
     @IBOutlet weak private var couterLabel: UILabel!
     
@@ -42,9 +43,20 @@ final class MovieQuizViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        imageView.layer.cornerRadius = 20
         let currentQuestion = questions[currentQuestionIndex]
         let convertedQuestion = convert(model: currentQuestion)
         show(quiz: convertedQuestion)
+    }
+    
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
+        let givenAnswer = true
+        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer)
+    }
+    
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
+        let givenAnswer = false
+        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer)
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -63,7 +75,7 @@ final class MovieQuizViewController: UIViewController {
         couterLabel.text = step.questionNumber
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    private func showAnswerResult(isCorrect: Bool,) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.cornerRadius = 20
@@ -75,7 +87,6 @@ final class MovieQuizViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self]  in
             imageView.layer.borderWidth = .nan
-            imageView.layer.cornerRadius = .nan
             showNextQuestionOrResults()
         }
     }
@@ -109,18 +120,11 @@ final class MovieQuizViewController: UIViewController {
             currentQuestionIndex += 1
             let convertedQuestionView = convert(model: questions[currentQuestionIndex])
             show(quiz: convertedQuestionView)
+            
         }
     }
     
-    @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer)
-    }
-    
-    @IBAction private func noButtonClicked(_ sender: UIButton) {
-        let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer)
-    }
+   
 }
 
 /*
