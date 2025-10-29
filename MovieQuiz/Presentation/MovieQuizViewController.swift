@@ -51,12 +51,13 @@ final class MovieQuizViewController: UIViewController {
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer)
+        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer, isButtonActive: sender)
+    
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer)
+        showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer, isButtonActive: sender)
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -75,11 +76,12 @@ final class MovieQuizViewController: UIViewController {
         couterLabel.text = step.questionNumber
     }
     
-    private func showAnswerResult(isCorrect: Bool,) {
+    private func showAnswerResult(isCorrect: Bool, isButtonActive: UIButton) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.cornerRadius = 20
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor
+        isButtonActive.isEnabled.toggle()
         
         if isCorrect {
             correctAnswers += 1
@@ -88,6 +90,7 @@ final class MovieQuizViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self]  in
             imageView.layer.borderWidth = .nan
             showNextQuestionOrResults()
+            isButtonActive.isEnabled.toggle()
         }
     }
     
@@ -120,7 +123,6 @@ final class MovieQuizViewController: UIViewController {
             currentQuestionIndex += 1
             let convertedQuestionView = convert(model: questions[currentQuestionIndex])
             show(quiz: convertedQuestionView)
-            
         }
     }
     
