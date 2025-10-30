@@ -7,6 +7,7 @@ final class MovieQuizViewController: UIViewController {
     }
 }
 
+
 /*
  Mock-данные
  
