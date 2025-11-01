@@ -93,7 +93,8 @@ final class MovieQuizViewController: UIViewController {
                 correctAnswers += 1
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self]  in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self]  in
+                guard let self = self else { return }
                 imageView.layer.borderWidth = .nan
                 showNextQuestionOrResults()
                 isButtonActive.isEnabled.toggle()
@@ -106,7 +107,8 @@ final class MovieQuizViewController: UIViewController {
                 message: result.text,
                 preferredStyle: .alert
             )
-            let alertAciton = UIAlertAction(title: result.buttonText, style: .default) { [self] _ in
+            let alertAciton = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
+                guard let self = self else { return }
                 correctAnswers = 0
                 currentQuestionIndex = 0
                 let convertedQuestionView = convert(model: questions[currentQuestionIndex])
