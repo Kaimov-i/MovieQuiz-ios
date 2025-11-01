@@ -1,10 +1,4 @@
 import UIKit
-
-final class MovieQuizViewController: UIViewController {
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     struct QuizQuestion {
         let image: String
@@ -33,18 +27,7 @@ final class MovieQuizViewController: UIViewController {
         
         private var currentQuestionIndex = 0
         private var correctAnswers = 0
-        private let questions: [QuizQuestion] = [
-            QuizQuestion(image: "The Godfather", text: "Рейтинг этого фильма больше чем 6?" , currentAnswer: true),
-            QuizQuestion(image: "The Dark Knight", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: true),
-            QuizQuestion(image: "Kill Bill", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: true),
-            QuizQuestion(image: "The Avengers", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: true),
-            QuizQuestion(image: "Deadpool", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: true,),
-            QuizQuestion(image: "The Green Knight", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: true),
-            QuizQuestion(image: "Old", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: false),
-            QuizQuestion(image: "The Ice Age Adventures of Buck Wild", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: false),
-            QuizQuestion(image: "Tesla", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: false),
-            QuizQuestion(image: "Vivarium", text: "Рейтинг этого фильма больше чем 6?", currentAnswer: false)
-        ]
+        
         
         // MARK: - Lifecycle
         override func viewDidLoad() {
@@ -87,7 +70,7 @@ final class MovieQuizViewController: UIViewController {
             imageView.layer.borderWidth = 8
             imageView.layer.cornerRadius = 20
             imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor
-            isButtonActive.isEnabled.toggle()
+            isButtonActive.isEnabled = false
             
             if isCorrect {
                 correctAnswers += 1
@@ -97,7 +80,7 @@ final class MovieQuizViewController: UIViewController {
                 guard let self = self else { return }
                 imageView.layer.borderWidth = .nan
                 showNextQuestionOrResults()
-                isButtonActive.isEnabled.toggle()
+                isButtonActive.isEnabled = true
             }
         }
         
@@ -136,7 +119,7 @@ final class MovieQuizViewController: UIViewController {
         
         
     }
-}
+
 
 /*
  Mock-данные
