@@ -1,29 +1,15 @@
 import UIKit
     
-    struct QuizQuestion {
-        let image: String
-        let text: String
-        let currentAnswer: Bool
-    }
-    
-    struct QuizStepViewModel {
-        let image: UIImage
-        let question: String
-        let questionNumber: String
-    }
-    
-    struct QuizResultsViewModel {
-        let title: String
-        let text: String
-        let buttonText: String
-    }
-    
     final class MovieQuizViewController: UIViewController {
         
         @IBOutlet weak private var imageView: UIImageView!
         
         @IBOutlet weak private var textLabel: UILabel!
         @IBOutlet weak private var couterLabel: UILabel!
+        
+        private let questionsAmount: Int = 10
+        private var questionFactory: QuestionFactory = QuestionFactory()
+        private var currentQuestion: QuizQuestion?
         
         private var currentQuestionIndex = 0
         private var correctAnswers = 0
@@ -33,20 +19,24 @@ import UIKit
         override func viewDidLoad() {
             super.viewDidLoad()
             imageView.layer.cornerRadius = 20
-            let currentQuestion = questions[currentQuestionIndex]
-            let convertedQuestion = convert(model: currentQuestion)
-            show(quiz: convertedQuestion)
+            if let question = questionFactory.requestNexQuestion() {
+                currentQuestion = question
+                let viewModel = convert(model: question)
+                show(quiz: viewModel)
+            }
         }
         
         @IBAction private func yesButtonClicked(_ sender: UIButton) {
             let givenAnswer = true
-            showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer, isButtonActive: sender)
+            guard let currentQuestion = currentQuestion else { return }
+            showAnswerResult(isCorrect: givenAnswer == currentQuestion.currentAnswer, isButtonActive: sender)
             
         }
         
         @IBAction private func noButtonClicked(_ sender: UIButton) {
             let givenAnswer = false
-            showAnswerResult(isCorrect: givenAnswer == questions[currentQuestionIndex].currentAnswer, isButtonActive: sender)
+            guard let currentQuestion = currentQuestion else { return }
+            showAnswerResult(isCorrect: givenAnswer == currentQuestion.currentAnswer, isButtonActive: sender)
         }
         
         private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -55,7 +45,7 @@ import UIKit
                     named: model.image
                 ) ?? UIImage(),
                 question: model.text,
-                questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)"
+                questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
             )
         }
         
@@ -94,7 +84,8 @@ import UIKit
                 guard let self = self else { return }
                 correctAnswers = 0
                 currentQuestionIndex = 0
-                let convertedQuestionView = convert(model: questions[currentQuestionIndex])
+                guard let currentQuestion = questionFactory.requestNexQuestion() else { return }
+                let convertedQuestionView = convert(model: currentQuestion)
                 show(quiz: convertedQuestionView)
             }
             
@@ -103,20 +94,25 @@ import UIKit
         }
         
         private func showNextQuestionOrResults() {
-            if currentQuestionIndex == questions.count - 1 {
+            if currentQuestionIndex == questionsAmount - 1 {
+                let text = correctAnswers == questionsAmount ?
+                "Поздравляем, вы ответили на 10 из 10!" :
+                "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+                
                 let result = QuizResultsViewModel(
                     title: "Этот раунд окончен!",
-                    text: "Ваш результат \(correctAnswers) из \(questions.count)",
+                    text: text,
                     buttonText: "Сыграть еще раз"
                 )
                 show(result: result)
             } else {
                 currentQuestionIndex += 1
-                let convertedQuestionView = convert(model: questions[currentQuestionIndex])
+                guard let nextQuestion = questionFactory.requestNexQuestion() else { return }
+                currentQuestion = nextQuestion
+                let convertedQuestionView = convert(model:  nextQuestion)
                 show(quiz: convertedQuestionView)
             }
         }
-        
         
     }
 

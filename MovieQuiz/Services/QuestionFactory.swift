@@ -50,4 +50,10 @@ class QuestionFactory {
             text: "Рейтинг этого фильма больше чем 6?",
             currentAnswer: false)
     ]
+    
+    func requestNexQuestion() -> QuizQuestion? {
+        guard let index = (0..<questions.count).randomElement() else { return nil}
+        
+        return questions[safe: index]
+    }
 }
