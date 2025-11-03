@@ -1,0 +1,16 @@
+//
+//  AlertModel.swift
+//  MovieQuiz
+//
+//  Created by Ilman on 03.11.2025.
+//
+
+import Foundation
+
+struct AlertModel {
+    let title: String
+    let message: String
+    let buttonText: String
+    
+    let comlition: () -> Void
+}
