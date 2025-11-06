@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AlertPresenter {
+final class AlertPresenter {
     func show(in vc: UIViewController, model: AlertModel) {
         
         let alert = UIAlertController(
@@ -17,12 +17,10 @@ class AlertPresenter {
         )
         
         let action = UIAlertAction(title: model.buttonText, style: .default) { _ in
-            model.comlition()
+            model.completion()
         }
         
         alert.addAction(action)
-        
         vc.present(alert, animated: true)
     }
-    
 }

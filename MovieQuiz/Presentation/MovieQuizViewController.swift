@@ -3,12 +3,12 @@ import UIKit
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private enum Keys: String {
-        case gamesCount          // Для счётчика сыгранных игр
-        case bestGameCorrect     // Для количества правильных ответов в лучшей игре
-        case bestGameTotal       // Для общего количества вопросов в лучшей игре
-        case bestGameDate        // Для даты лучшей игры
-        case totalCorrectAnswers // Для общего количества правильных ответов за все игры
-        case totalQuestionsAsked // Для общего количества вопросов, заданных за все игры
+        case gamesCount
+        case bestGameCorrect
+        case bestGameTotal
+        case bestGameDate
+        case totalCorrectAnswers
+        case totalQuestionsAsked
     }
     
     @IBOutlet weak private var imageView: UIImageView!
@@ -38,7 +38,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     // MARK: - QuestionFactoryDelegate
     func didReciveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else { return }
+        guard let question else { return }
         currentQuestion = question
         let viewModel = convert(model: question)
         
@@ -61,7 +61,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     //MARK: Private functions
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        return QuizStepViewModel(
+        QuizStepViewModel(
             image: UIImage(
                 named: model.image
             ) ?? UIImage(),
@@ -96,7 +96,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(result: QuizResultsViewModel) {
-        let model = AlertModel(title: result.title, message: result.text, buttonText: result.buttonText) { [weak self] in
+        let model = AlertModel(
+            title: result.title,
+            message: result.text,
+            buttonText: result.buttonText
+        ) { [weak self] in
+            
             guard let self = self else { return }
             correctAnswers = 0
             currentQuestionIndex = 0
@@ -109,8 +114,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         if currentQuestionIndex == questionsAmount - 1 {
             let game = GameResult(correct: correctAnswers, total: 10, date: Date())
             statisticService.store(gameResult: game)
+            let text = "Ваш результат: \(correctAnswers)/10\n Колличество сыграннхы квизов \(statisticService.gamesCount)\n Рекорд \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString)) \n Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
             
-            let text = "Вы ответили на \(correctAnswers) из 10\n Колличество сыграннхы квизов \(statisticService.gamesCount)\n Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) \(statisticService.bestGame.date.dateTimeString) \n Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))% "
             
             let result = QuizResultsViewModel(
                 title: "Этот раунд окончен!",

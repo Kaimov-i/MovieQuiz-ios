@@ -80,10 +80,3 @@ class StatisticService: StatisticServiceProtocol {
         }
     }
 }
-
-
-
-
-
-
-
