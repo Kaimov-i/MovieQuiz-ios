@@ -24,5 +24,5 @@ class AlertPresenter {
         
         vc.present(alert, animated: true)
     }
-
+    
 }

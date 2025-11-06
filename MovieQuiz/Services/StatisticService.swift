@@ -17,8 +17,23 @@ class StatisticService: StatisticServiceProtocol {
         case totalQuestionsAsked // Для общего количества вопросов, заданных за все игры
     }
     
-    private var totalCorrectAnswer: Int = 0
-    private var totalQuestionsAsked: Int = 0
+    var totalCorrectAnswer: Int  {
+        get {
+            storage.integer(forKey: Keys.totalCorrectAnswers.rawValue)
+        } set {
+            storage.set(newValue, forKey: Keys.totalCorrectAnswers.rawValue)
+        }
+    }
+    
+    var totalQuestionsAsked: Int {
+        get {
+            storage.integer(forKey: Keys.totalQuestionsAsked.rawValue)
+        }
+        set {
+            storage.set(newValue, forKey: Keys.totalQuestionsAsked.rawValue)
+        }
+    }
+    
     private let storage: UserDefaults = .standard
     
     var gamesCount: Int {
@@ -28,7 +43,6 @@ class StatisticService: StatisticServiceProtocol {
         set {
             storage.set(newValue, forKey: Keys.gamesCount.rawValue)
         }
-        
     }
     
     var bestGame: GameResult {
@@ -43,36 +57,30 @@ class StatisticService: StatisticServiceProtocol {
             storage.set(newValue.correct, forKey: Keys.bestGameCorrect.rawValue)
             storage.set(newValue.total, forKey: Keys.bestGameTotal.rawValue)
             storage.set(newValue.date, forKey: Keys.bestGameDate.rawValue)
-            
         }
     }
     
     var totalAccuracy: Double {
         get {
-            
             totalCorrectAnswer += storage.integer(forKey: Keys.totalCorrectAnswers.rawValue)
             totalQuestionsAsked += storage.integer(forKey: Keys.totalQuestionsAsked.rawValue)
-            return (Double(totalCorrectAnswer) / Double(totalQuestionsAsked)) * 100.0
+            return Double(totalCorrectAnswer) / Double(totalQuestionsAsked) * 100.0
         }
         set {
             storage.set(newValue, forKey: "totalAccuracy")
         }
-        
-        
     }
     
     func store(gameResult: GameResult) {
-        
+        totalCorrectAnswer += gameResult.correct
+        totalQuestionsAsked += gameResult.total
         gamesCount += 1
-        if bestGame.correct < gameResult.correct {
+        if bestGame.isBetterThan(gameResult) {
             bestGame = gameResult
-            totalCorrectAnswer += gameResult.correct
-            totalQuestionsAsked += gameResult.total
         }
-        
     }
 }
-    
+
 
 
 

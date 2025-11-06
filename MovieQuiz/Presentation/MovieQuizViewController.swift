@@ -20,7 +20,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter = AlertPresenter()
-    private var gameResults = GameResult(correct: 0, total: 0, date: Date())
     private var statisticService: StatisticServiceProtocol!
     
     private var currentQuestionIndex = 0
@@ -31,13 +30,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         statisticService = StatisticService()
+        
         imageView.layer.cornerRadius = 20
         
         let questionFactory = QuestionFactory()
         questionFactory.setup(delegate: self)
-        
         self.questionFactory = questionFactory
         self.questionFactory?.requestNextQuestion()
     }
@@ -45,6 +43,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     func didReciveNextQuestion(question: QuizQuestion?) {
         guard let question = question else { return }
         currentQuestion = question
+        
         let viewModel = convert(model: question)
         
         DispatchQueue.main.async { [weak self] in
@@ -57,7 +56,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let givenAnswer = true
         guard let currentQuestion = currentQuestion else { return }
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.currentAnswer, isButtonActive: sender)
-        
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
@@ -106,7 +104,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let self = self else { return }
             correctAnswers = 0
             currentQuestionIndex = 0
-            
             questionFactory?.requestNextQuestion()
         }
         alertPresenter.show(in: self, model: model)
@@ -114,31 +111,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 {
-            gameResults.correct = correctAnswers
-            gameResults.total = 10
-            gameResults.date = Date()
+            let game = GameResult(correct: correctAnswers, total: 10, date: Date())
+            statisticService.store(gameResult: game)
             
-            statisticService.store(gameResult: gameResults)
-            print(statisticService?.totalAccuracy ?? 0.0)
-            let text =
-            "Вы ответили на \(correctAnswers) из 10\n Колличество сыграннхы квизов \(statisticService.gamesCount)\n Рекорд: \(gameResults.correct)/\(gameResults.total) \(gameResults.date.dateTimeString)\n Средняя точность: "
+            let text = "Вы ответили на \(correctAnswers) из 10\n Колличество сыграннхы квизов \(statisticService.gamesCount)\n Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) \(statisticService.bestGame.date.dateTimeString) \n Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))% "
             
             let result = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: text,
                 buttonText: "Сыграть еще раз"
             )
-            
-            
             show(result: result)
+            print("rigtn answers: \(statisticService.totalCorrectAnswer)/n Total questions: \(statisticService.totalQuestionsAsked)")
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
         }
     }
-    
-    
-    
 }
 
 
