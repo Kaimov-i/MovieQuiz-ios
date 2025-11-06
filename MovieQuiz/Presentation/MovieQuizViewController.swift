@@ -123,7 +123,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 buttonText: "Сыграть еще раз"
             )
             show(result: result)
-            print("rigtn answers: \(statisticService.totalCorrectAnswer)/n Total questions: \(statisticService.totalQuestionsAsked)")
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
