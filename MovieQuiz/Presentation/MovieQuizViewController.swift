@@ -22,7 +22,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestion: QuizQuestion?
     private var alertPresenter = AlertPresenter()
     private var statisticService: StatisticServiceProtocol!
-    private var movieLoader: MovieLoading?
+   
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
@@ -53,8 +53,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         questionFactory?.requestNextQuestion()
     }
     
-    func didFailToLoadData(with error: any Error) {
+    func didFailToLoadData(with error: Error) {
         showNetworkEror(message: error.localizedDescription)
+        
     }
     
     // MARK: - Actions
@@ -150,7 +151,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showNetworkEror(message: String) {
         hideLoadingIndicator()
         
-        var alert = AlertModel(
+        let alert = AlertModel(
             title: "Error",
             message: message,
             buttonText: "Попробовать ещё раз") { [weak self] in

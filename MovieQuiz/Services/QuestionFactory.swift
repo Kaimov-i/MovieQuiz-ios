@@ -96,6 +96,9 @@ class QuestionFactory: QuestionFactoryProtocol {
             do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
+                DispatchQueue.main.async {
+                    self.delegate?.didFailToLoadData(with: error)
+                }
                 print("Faled load image")
             }
             
@@ -111,6 +114,7 @@ class QuestionFactory: QuestionFactoryProtocol {
             DispatchQueue.main.async { [weak self ] in
                 guard let self = self else { return }
                 self.delegate?.didReciveNextQuestion(question: question)
+               
             }
         }
     }
