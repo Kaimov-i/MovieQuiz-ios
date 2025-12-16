@@ -17,10 +17,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet weak private var couterLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    private var questionFactory: QuestionFactoryProtocol?
-    private var currentQuestion: QuizQuestion?
+    var questionFactory: QuestionFactoryProtocol?
+   
     private var alertPresenter = AlertPresenter()
-    private var statisticService: StatisticServiceProtocol!
+    var statisticService: StatisticServiceProtocol!
     private let presenter = MovieQuizPresenter()
     
     private var correctAnswers = 0
@@ -38,13 +38,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     // MARK: - QuestionFactoryDelegate
     func didReciveNextQuestion(question: QuizQuestion?) {
-        guard let question else { return }
-        currentQuestion = question
-        let viewModel = presenter.convert(model: question)
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
-        }
+        presenter.didReciveNextQuestion(question: question)
     }
     
     func didLoadDataFromServer() {
@@ -59,18 +53,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - Actions
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.currentQuestion = currentQuestion
         presenter.yesButtonClicked(sender)
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.currentQuestion = currentQuestion
         presenter.noButtonClicked(sender)
     }
-    //MARK: Private functions
-   
     
-    private func show(quiz step: QuizStepViewModel) {
+    //MARK: Private functions
+    func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
         couterLabel.text = step.questionNumber
@@ -89,13 +80,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self]  in
             guard let self = self else { return }
+            self.presenter.correctAnswers = self.correctAnswers
+            self.presenter.questionFactory = self.questionFactory
+            self.presenter.showNextQuestionOrResults()
             imageView.layer.borderWidth = .nan
-            showNextQuestionOrResults()
             isButtonActive.isEnabled = true
         }
     }
     
-    private func show(result: QuizResultsViewModel) {
+    func show(result: QuizResultsViewModel) {
         let model = AlertModel(
             title: result.title,
             message: result.text,
