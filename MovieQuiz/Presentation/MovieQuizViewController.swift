@@ -23,7 +23,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     var statisticService: StatisticServiceProtocol!
     private let presenter = MovieQuizPresenter()
     
-    private var correctAnswers = 0
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -73,14 +72,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.cornerRadius = 20
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor: UIColor.ypRed.cgColor
         isButtonActive.isEnabled = false
-        
-        if isCorrect {
-            correctAnswers += 1
-        }
+    
+            presenter.didAnswer(isCorrectAnswer: isCorrect)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self]  in
             guard let self = self else { return }
-            self.presenter.correctAnswers = self.correctAnswers
             self.presenter.questionFactory = self.questionFactory
             self.presenter.showNextQuestionOrResults()
             imageView.layer.borderWidth = .nan
@@ -96,8 +92,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         ) { [weak self] in
             
             guard let self = self else { return }
-            correctAnswers = 0
-            presenter.resetQuestionIndex()
+            self.presenter.restartGame()
             questionFactory?.requestNextQuestion()
         }
         alertPresenter.show(in: self, model: model)
@@ -105,20 +100,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNextQuestionOrResults() {
         if presenter.isLastQuestionIndex() {
-            let game = GameResult(correct: correctAnswers, total: 10, date: Date())
-            statisticService.store(gameResult: game)
-            let text = "Ваш результат: \(correctAnswers)/10\n Колличество сыграннхы квизов \(statisticService.gamesCount)\n Рекорд \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString)) \n Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
-            
-            
-            let result = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть еще раз"
-            )
-            show(result: result)
-        } else {
-            presenter.switchToNextQuestion()
-            questionFactory?.requestNextQuestion()
+            presenter.showNextQuestionOrResults()
         }
     }
     
@@ -141,9 +123,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             buttonText: "Попробовать ещё раз") { [weak self] in
                 guard let self = self else { return }
                 
-                self.presenter.resetQuestionIndex()
-                self.correctAnswers = 0
-                
+                self.presenter.restartGame()
                 self.questionFactory?.requestNextQuestion()
             }
         
