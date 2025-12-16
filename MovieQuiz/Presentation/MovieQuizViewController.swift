@@ -29,7 +29,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         statisticService = StatisticService()
-        
+        presenter.viewController = self
         imageView.layer.cornerRadius = 20
         
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
@@ -59,15 +59,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - Actions
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        let givenAnswer = true
-        guard let currentQuestion = currentQuestion else { return }
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.currentAnswer, isButtonActive: sender)
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonClicked(sender)
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        let givenAnswer = false
-        guard let currentQuestion = currentQuestion else { return }
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.currentAnswer, isButtonActive: sender)
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonClicked(sender)
     }
     //MARK: Private functions
    
@@ -78,7 +76,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         couterLabel.text = step.questionNumber
     }
     
-    private func showAnswerResult(isCorrect: Bool, isButtonActive: UIButton) {
+    func showAnswerResult(isCorrect: Bool, isButtonActive: UIButton) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.cornerRadius = 20
