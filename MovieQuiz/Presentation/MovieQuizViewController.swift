@@ -17,7 +17,6 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     private var alertPresenter = AlertPresenter()
-    
     private var presenter: MovieQuizPresenter!
     
     
@@ -41,6 +40,7 @@ final class MovieQuizViewController: UIViewController {
     
     //MARK: Private functions
     func show(quiz step: QuizStepViewModel) {
+        imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.image = step.image
         textLabel.text = step.question
         couterLabel.text = step.questionNumber
@@ -62,7 +62,6 @@ final class MovieQuizViewController: UIViewController {
             buttonText: result.buttonText
         ) { [weak self] in
             guard let self = self else { return }
-            
             self.presenter.restartGame()
         }
         alertPresenter.show(in: self, model: alertModel)

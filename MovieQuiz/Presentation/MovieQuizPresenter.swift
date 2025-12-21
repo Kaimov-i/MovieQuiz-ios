@@ -12,8 +12,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
     private var correctAnswers = 0
-    
     private var currentQuestion: QuizQuestion?
+    
     private var statisticService: StatisticServiceProtocol!
     private var questionFactory: QuestionFactoryProtocol?
     private weak var viewController: MovieQuizViewController?
@@ -68,7 +68,10 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     private func didAnswer(isYes: Bool, sender: UIButton) {
-        proceedWithAnswer(isCorrect: isYes)
+        guard let currentQuestion  else {
+            return
+        }
+        proceedWithAnswer(isCorrect: isYes == currentQuestion.currentAnswer, buttonIsActive: sender)
     }
     
     func didReciveNextQuestion(question: QuizQuestion?) {
@@ -87,13 +90,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    func proceedWithAnswer(isCorrect: Bool) {
+    func proceedWithAnswer(isCorrect: Bool, buttonIsActive: UIButton) {
+        buttonIsActive.isEnabled = false
         didAnswer(isCorrectAnswer: isCorrect)
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {  [weak self] in
             guard let self = self else { return }
             self.proceedToNextQuestionOrResults()
+            buttonIsActive.isEnabled = true
         }
     }
     
