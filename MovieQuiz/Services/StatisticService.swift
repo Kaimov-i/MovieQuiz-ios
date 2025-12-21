@@ -15,6 +15,7 @@ class StatisticService: StatisticServiceProtocol {
         case bestGameDate        // Для даты лучшей игры
         case totalCorrectAnswers // Для общего количества правильных ответов за все игры
         case totalQuestionsAsked // Для общего количества вопросов, заданных за все игры
+       
     }
     
     var totalCorrectAnswer: Int  {
@@ -77,6 +78,14 @@ class StatisticService: StatisticServiceProtocol {
         gamesCount += 1
         if bestGame.isBetterThan(gameResult) {
             bestGame = gameResult
+        }
+    }
+    
+    func deleteAll() {
+        let allKeys = storage.dictionaryRepresentation().keys
+        
+        allKeys.forEach { key in
+            storage.removeObject(forKey: key)
         }
     }
 }
