@@ -2,46 +2,47 @@
 //  MovieQuizTests.swift
 //  MovieQuizTests
 //
-//  Created by Ilman on 05.12.2025.
+//  Created by Ilman on 23.12.2025.
 //
 
 import XCTest
 
-struct ArithmeticOperations {
-    func addition(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            handler(num1 + num2)
-        }
-    }
-    
-    func subtracttion(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            handler(num1 + num2)
-        }
-    }
-    
-    func multiplication(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
-        handler(num1 * num2)
-    }
-}
+final class MovieQuizTests: XCTestCase {
 
-class MovieQuizTests: XCTestCase {
+    struct ArithmeticOperations {
+        func addition(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                handler(num1 + num2)
+            }
+        }
+        
+        func subtraction(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                handler(num1 - num2)
+            }
+        }
+        
+        func multiplication(num1: Int, num2: Int, handler: @escaping (Int) -> Void) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                handler(num1 * num2)
+            }
+        }
+    }
+    
     func testAddition() throws {
-        //Give
-        let arethmeticOperations = ArithmeticOperations()
-        let num1 = 1
-        let num2 = 2
+        //Given
+        let arithmeticOperations = ArithmeticOperations()
         
         //When
         let expectation = expectation(description: "Addition function expectation")
-        
-        arethmeticOperations.addition(num1: num1, num2: num2) { result in
-            //Then
-                XCTAssertEqual(result, 3)
+
+        arithmeticOperations.addition(num1: 1, num2: 2) { result in
+            
+        //Then
+            XCTAssertEqual(result, 3)
             expectation.fulfill()
         }
         
         waitForExpectations(timeout: 2)
-       
     }
 }

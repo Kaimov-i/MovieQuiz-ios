@@ -1,6 +1,8 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
+   
+    
     
     private enum Keys: String {
         case gamesCount
@@ -64,6 +66,7 @@ final class MovieQuizViewController: UIViewController {
             guard let self = self else { return }
             self.presenter.restartGame()
         }
+        
         alertPresenter.show(in: self, model: alertModel)
     }
     
