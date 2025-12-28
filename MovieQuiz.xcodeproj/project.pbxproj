@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		89014E4C2ED3B6DC003B22DC /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89014E4B2ED3B6DC003B22DC /* NetworkClient.swift */; };
+		89014E4E2ED3BB22003B22DC /* MostPopularMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89014E4D2ED3BB22003B22DC /* MostPopularMovies.swift */; };
+		89014E502ED3C201003B22DC /* MoviesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89014E4F2ED3C201003B22DC /* MoviesLoader.swift */; };
 		895D89502EB9EFE70041C508 /* StatisticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895D894F2EB9EFE70041C508 /* StatisticService.swift */; };
 		89829E4E2EB7FBD000D17042 /* QuestionFactoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89829E4D2EB7FBD000D17042 /* QuestionFactoryDelegate.swift */; };
 		89829E502EB8845000D17042 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89829E4F2EB8845000D17042 /* AlertModel.swift */; };
@@ -32,6 +35,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		89014E4B2ED3B6DC003B22DC /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		89014E4D2ED3BB22003B22DC /* MostPopularMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MostPopularMovies.swift; sourceTree = "<group>"; };
+		89014E4F2ED3C201003B22DC /* MoviesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesLoader.swift; sourceTree = "<group>"; };
 		895D894F2EB9EFE70041C508 /* StatisticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticService.swift; sourceTree = "<group>"; };
 		89829E4D2EB7FBD000D17042 /* QuestionFactoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactoryDelegate.swift; sourceTree = "<group>"; };
 		89829E4F2EB8845000D17042 /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
@@ -77,6 +83,8 @@
 				89829E4D2EB7FBD000D17042 /* QuestionFactoryDelegate.swift */,
 				89829E882EB95FF600D17042 /* StatisticServiceProtocol.swift */,
 				895D894F2EB9EFE70041C508 /* StatisticService.swift */,
+				89014E4B2ED3B6DC003B22DC /* NetworkClient.swift */,
+				89014E4F2ED3C201003B22DC /* MoviesLoader.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -89,6 +97,7 @@
 				89D4B48C2EB6B732008F13EB /* QuizResultsViewModel.swift */,
 				89829E4F2EB8845000D17042 /* AlertModel.swift */,
 				89829E8A2EB960C800D17042 /* GameResult.swift */,
+				89014E4D2ED3BB22003B22DC /* MostPopularMovies.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -230,11 +239,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
+				89014E4E2ED3BB22003B22DC /* MostPopularMovies.swift in Sources */,
 				89829E522EB884D300D17042 /* AlertPresenter.swift in Sources */,
 				89829E502EB8845000D17042 /* AlertModel.swift in Sources */,
 				AD7AFA552836189F00399704 /* Array+Extensions.swift in Sources */,
 				89829E8B2EB960C800D17042 /* GameResult.swift in Sources */,
 				89A1ED5B2EB706F800AE99E0 /* QuestionFactoryProtocol.swift in Sources */,
+				89014E502ED3C201003B22DC /* MoviesLoader.swift in Sources */,
 				89829E4E2EB7FBD000D17042 /* QuestionFactoryDelegate.swift in Sources */,
 				89D4B48D2EB6B732008F13EB /* QuizResultsViewModel.swift in Sources */,
 				89D4B48B2EB6B716008F13EB /* QuizStepViewModel.swift in Sources */,
@@ -244,6 +255,7 @@
 				AD77F5742857F8810062FB14 /* Date+Extensions.swift in Sources */,
 				AD1ABAB22831907B00B3E448 /* AppDelegate.swift in Sources */,
 				89D4B4892EB6B6B5008F13EB /* QuizQuestion.swift in Sources */,
+				89014E4C2ED3B6DC003B22DC /* NetworkClient.swift in Sources */,
 				AD1ABAB42831907B00B3E448 /* SceneDelegate.swift in Sources */,
 				895D89502EB9EFE70041C508 /* StatisticService.swift in Sources */,
 			);
