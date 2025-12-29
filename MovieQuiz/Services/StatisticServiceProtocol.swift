@@ -15,4 +15,5 @@ protocol StatisticServiceProtocol {
     var totalQuestionsAsked: Int { get }
     
     func store(gameResult: GameResult)
+    func deleteAll()
 }
